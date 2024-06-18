@@ -1,13 +1,9 @@
-﻿using System.Text;
+﻿using QRCoder;
+using System.Drawing;
+using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace QRCode_Generator_WPF
 {
@@ -19,6 +15,54 @@ namespace QRCode_Generator_WPF
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            using QRCodeGenerator generator = new();
+            using QRCodeData codedata = generator.CreateQrCode(qrcontent.Text, QRCodeGenerator.ECCLevel.H);
+            using QRCode qrcode = new(codedata);
+            using Bitmap bmp = qrcode.GetGraphic(100);
+            qrimage.Source = ConvertBitmapToImageSource(bmp);
+        }
+
+        static ImageSource ConvertBitmapToImageSource(Bitmap bitmap)
+        {
+            using MemoryStream memoryStream = new();
+            bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
+            memoryStream.Position = 0;
+
+            BitmapImage bitmapImage = new();
+            bitmapImage.BeginInit();
+            bitmapImage.CacheOption = BitmapCacheOption.OnLoad;
+            bitmapImage.StreamSource = memoryStream;
+            bitmapImage.EndInit();
+            bitmapImage.Freeze();
+
+            return bitmapImage;
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            using QRCodeGenerator generator = new();
+            using QRCodeData codedata = generator.CreateQrCode(qrcontent.Text, QRCodeGenerator.ECCLevel.H);
+            using QRCode qrcode = new(codedata);
+            using Bitmap bmp = qrcode.GetGraphic(100);
+
+            Microsoft.Win32.SaveFileDialog dlg = new()
+            {
+                Title = "QRCode",
+                FileName = "qrcode",
+                DefaultExt = ".jpg",
+                Filter = "Jpeg (.jpg)|*.jpg"
+            };
+
+            if (dlg.ShowDialog() == true)
+            {
+                string filename = dlg.FileName;
+                bmp.Save(filename);
+            }
+
         }
     }
 }
