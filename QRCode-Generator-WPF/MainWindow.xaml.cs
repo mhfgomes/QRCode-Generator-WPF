@@ -2,7 +2,6 @@
 using System.Drawing;
 using System.IO;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace QRCode_Generator_WPF
@@ -12,6 +11,8 @@ namespace QRCode_Generator_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        BitmapImage qrcodeimage = null;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -23,10 +24,15 @@ namespace QRCode_Generator_WPF
             using QRCodeData codedata = generator.CreateQrCode(qrcontent.Text, QRCodeGenerator.ECCLevel.H);
             using QRCode qrcode = new(codedata);
             using Bitmap bmp = qrcode.GetGraphic(100);
-            qrimage.Source = ConvertBitmapToImageSource(bmp);
+            qrcodeimage = ConvertBitmapToImageSource(bmp);
+            qrimage.Source = qrcodeimage;
+            bmp.Dispose();
+            qrcode.Dispose();
+            codedata.Dispose();
+            generator.Dispose();
         }
 
-        static ImageSource ConvertBitmapToImageSource(Bitmap bitmap)
+        static BitmapImage ConvertBitmapToImageSource(Bitmap bitmap)
         {
             using MemoryStream memoryStream = new();
             bitmap.Save(memoryStream, System.Drawing.Imaging.ImageFormat.Png);
@@ -38,6 +44,9 @@ namespace QRCode_Generator_WPF
             bitmapImage.StreamSource = memoryStream;
             bitmapImage.EndInit();
             bitmapImage.Freeze();
+
+            memoryStream.Close();
+            memoryStream.Dispose();
 
             return bitmapImage;
         }

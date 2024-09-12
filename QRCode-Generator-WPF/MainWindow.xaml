@@ -5,9 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:QRCode_Generator_WPF"
         mc:Ignorable="d"
-        Title="MainWindow"
+        Title="QRCode Generator"
+        MinHeight="450"
         Height="450"
-        Width="800">
+        MinWidth="350"
+        Width="350" Icon="/qrcode.jpg">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -32,7 +34,7 @@
         <Grid Grid.Column="1" Grid.ColumnSpan="1" Grid.Row="2" Grid.RowSpan="1">
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Bottom">
                 <Label Content="Texto QRcode:"/>
-                <TextBox x:Name="qrcontent" Width="200"/>
+                <TextBox x:Name="qrcontent" MinWidth="150" MaxWidth="250"/>
                 <Label/>
                 <Button Content="Gerar QRcode" Click="Button_Click"/>
                 <Label/>
