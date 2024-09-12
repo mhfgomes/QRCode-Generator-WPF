@@ -11,7 +11,7 @@ namespace QRCode_Generator_WPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        BitmapImage qrcodeimage = null;
+        BitmapImage qrcodeimage = new();
 
         public MainWindow()
         {
