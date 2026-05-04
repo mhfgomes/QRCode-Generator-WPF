@@ -62,8 +62,8 @@ namespace QRCode_Generator_WPF
             {
                 Title = "QRCode",
                 FileName = "qrcode",
-                DefaultExt = ".jpg",
-                Filter = "Jpeg (.jpg)|*.jpg"
+                DefaultExt = ".tif",
+                Filter = "TIF (.tif)|*.tif"
             };
 
             if (dlg.ShowDialog() == true)
